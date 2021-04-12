@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewData["Title"] = "Module2";
+}
+
+<div class="shadow-lg bg-dark p-3 mb-1 rounded">
+    <div class="btn-group">
+        <a class="btn btn-light rounded-pill" asp-controller="Home" asp-action="Assignment1" type="submit">Assignment 1</a>
+        <a class="btn btn-light rounded-pill" asp-controller="Home" asp-action="Assignment2" type="submit">Assignment 2</a>
+    </div>
+</div>
+
+<div id="moduleApp" class="rounded">
+    <div class="card shadow mb-3">
+        <div class="card-header bg-success d-flex justify-content-center">
+            <h1 class="text-light text-center">Vue.js Course Goals</h1>
+        </div>
+    </div>
+</div>
+
+
+<div id="user-goal" class="my-2">
+    <div class="rounded">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="text-black text-center border-bottom-thicc pb-1">My Course Goal</h2>
+                <a class="btn btn-dark text-white float-right" v-on:click="toggleCollapse">{{isNotShown ? 'Show' : 'Collapse'}}</a>
+            </div>
+            <div class="card-body bg-lightd-fex justify-content-center" v-bind:class="{ 'collapse': isNotShown}">
+                <section>
+                    <p class="w-100 text-center badge badge-warning rounded-pill py-3 font-weight-bolder font-lg">{{ outputGoal() }}</p>
+                    <p class="w-100 text-center badge badge-warning rounded-pill py-3 font-weight-bolder font-lg">Learn more <a v-bind:href="vueLink">about Vue</a></p>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="events" class="my-2">
+    <div class="rounded">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="text-black text-center border-bottom-thicc pb-1">Events in Action</h2>
+                <a class="btn btn-dark text-white float-right" v-on:click="toggleCollapse">{{isNotShown ? 'Show' : 'Collapse'}}</a>
+            </div>
+            <div class="card-body bg-lightd-fex justify-content-center" v-bind:class="{ 'collapse': isNotShown}">
+                <section >
+                    <div class="w-100 d-flex justify-content-center">
+                        <div class="d-flex justify-content-around w-50 my-1">
+                            <button class="btn btn-danger" v-on:click="countDecrease(5)">Remove</button>
+                            <button class="btn btn-danger" v-on:click="countIncrease(5)">Add</button>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center my-1 w-100">
+                        <p class="w-25 font-lg badge badge-secondary">Result: {{ currentCount }}</p>
+                    </div>
+                    <div class="w-100 d-flex justify-content-center">
+                        <div class="w-50 form-group row">
+                            <input type="text" class="form-control-plaintext col-12 text-center my-1 shadow border" v-on:input="setName($event, 'Rogers')" v-on:keyup.enter="confirmInput"/>
+                            <p class="col-12 font-lg badge badge-secondary text-center">Your Name: {{ confirmedUserName }}</p>
+                        </div>
+                    </div>
+                    <form v-on:submit.prevent="submitForm" class="d-flex justify-content-center py-1">
+                        <input class=" text-center border mx-1" type="text"/>
+                        <button class="btn btn-success" type="submit">Sign Up!</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    const part1 = Vue.createApp({
+        data() {
+
+            return {
+                courseGoal: 'Finish the course and learn Vue.js',
+                furtherCourseGoals: 'Master Vue to create some awesome apps!',
+                vueLink: 'https://vuejs.org',
+                isNotShown: true
+
+            };
+        },
+        methods: {
+            outputGoal() {
+                const randomNumber = Math.random();
+                if (randomNumber < 0.5) {
+                    return this.courseGoal;
+                } else {
+                    return this.furtherCourseGoals;
+                }
+            },
+            toggleCollapse() {
+                this.isNotShown = !this.isNotShown;
+            }
+        }
+
+    });
+    part1.mount('#user-goal');
+
+    const part2 = Vue.createApp({
+        data() {
+            return {
+                courseGoal: 'Finish the course and learn Vue.js',
+                furtherCourseGoals: 'Master Vue to create some awesome apps!',
+                vueLink: 'https://vuejs.org',
+                isNotShown: false,
+                currentCount: 0,
+                userName: '', 
+                confirmedUserName: ''
+            };
+        },
+        methods: {
+            outputGoal() {
+                const randomNumber = Math.random();
+                if (randomNumber < 0.5) {
+                    return this.courseGoal;
+                } else {
+                    return this.furtherCourseGoals;
+                }
+            },
+            toggleCollapse() {
+                this.isNotShown = !this.isNotShown;
+            },
+            countIncrease(num) {
+                this.currentCount += num;
+            },
+            countDecrease(num) {
+                this.currentCount -= num;
+            },
+            setName(event, lastName) {
+                this.userName = event.target.value + ' ' + lastName;
+            },
+            submitFormOld(event) {
+                //This will work, but there is a Vue way to do things
+                event.preventDefault();
+                alert('Submitted!');
+            },
+            submitForm() {
+                alert('Signed up!')
+            },
+            confirmInput() {
+                this.confirmedUserName = this.userName;
+            }
+        }
+    });
+    part2.mount('#events');
+
+
+</script>

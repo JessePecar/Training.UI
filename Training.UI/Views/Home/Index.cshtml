@@ -1,0 +1,27 @@
+﻿<div id="graphics" class="p-3 mt-3 shadow-lg">
+    <div class="form-group p-1">
+        <label for="goal" class="mb-1">Goal</label>
+        <input type="text" class="form-control mb-1" v-model="enteredValue" id="goal" />
+        <button class="btn btn-dark" v-on:click="addGoal">Add Goal</button>
+    </div>
+    <hr />
+    <ul class="list-group list-group-flush" id="">
+        <li class="list-group-item" v-for="goal in goals">{{ goal }}</li>
+    </ul>
+</div>
+<script>
+    Vue.createApp({
+        data: function() {
+        return {
+            goals: [],
+            enteredValue: ''
+        };
+    },
+        methods: {
+            addGoal() {
+                this.goals.push(this.enteredValue);
+                this.enteredValue = '';
+            }
+    }
+}).mount('#graphics');
+</script>
