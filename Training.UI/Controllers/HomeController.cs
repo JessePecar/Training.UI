@@ -37,6 +37,10 @@ namespace Training.UI.Controllers
         {
             return View("~/Views/Home/Assignment2.cshtml");
         }
+        public IActionResult Assignment3()
+        {
+            return View("~/Views/Home/Assignment3.cshtml");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

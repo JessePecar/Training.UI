@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "Assignment2";
+}
+
+<h1>Assignment 3 - Reactivity</h1>
+<section id="user-description" class="card shadow-lg">
+    <div class="card-header ">
+        <h2 class="w-100 text-center p-3">Reactivity in Action</h2>
+    </div>
+    <div class="card-body row">
+        <div class="col-2"></div>
+        <div class="d-flex justify-content-around col-8">
+            <button class="btn btn-danger" v-on:click="increment(5)">Add 5</button>
+            <button class="btn btn-danger" v-on:click="increment(1)">Add 1</button>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+        <div class="d-flex justify-content-around col-8">
+            <p class="badge badge-success font-lg">Result: {{ result }}</p>
+        </div>
+        <div class="col-2"></div>
+    </div>
+
+</section>
+
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                count: 0
+            };
+        },
+        computed: {
+            result() {
+                if (this.count < 37) {
+                    return 'Not There Yet!';
+                } else if (this.count > 37) {
+                    return 'Too Much!';
+                } else {
+                    return 'Hooray!';
+                }
+            }
+        },
+        watch: {
+            result() {
+                setTimeout(this.resetCount, 5000)
+            }
+        },
+        methods: {
+            increment(value) {
+                this.count += value;
+            },
+            resetCount() {
+                this.count = 0;
+            }
+        }
+
+    });
+
+    app.mount('#user-description');
+
+</script>

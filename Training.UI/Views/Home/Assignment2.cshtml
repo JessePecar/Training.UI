@@ -1,31 +1,43 @@
 ﻿
 @{
-    ViewData["Title"] = "Assignment1";
+    ViewData["Title"] = "Assignment2";
 }
 
-<h1>Assignment1</h1>
+<h1>Assignment 2 - Events</h1>
 <section id="user-description" class="card shadow-lg">
     <div class="card-header ">
-        <h2 class="w-100 text-center p-3">{{ userName }}</h2>
+        <h2 class="w-100 text-center p-3">Event Practice</h2>
     </div>
-    <div class="card-body d-flex justify-content-center">
-        <div class="w-50">
-            <p v-bind:class="textClass">Age - {{ userAge }}</p>
-            <p v-bind:class="textClass">Age in 5 years: {{ getUserFutureAge() }}</p>
-            <p v-bind:class="textClass">Favorite Number: {{ randomNumber }}</p>
-            <p v-bind:class="textClass" v-for="input in userDefinedInput">{{ input }}</p>
+    <div class="card-body d-flex flex-column">
+        <div class="w-100 d-flex justify-content-center">
+            <button class="btn btn-danger w-25" v-on:click.prevent="showAlert()">Show Alert</button>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-center w-100">
+            <div class="d-flex flex-column w-50">
+                <div class="w-100 d-flex justify-content-center">
+                    <!-- Key Down output (event.target.value)-->
+                    <input type="text" class="w-50 my-1" v-on:keyup="onKeyDown" />
+                </div>
+                <div class="w-100 d-flex justify-content-center">
+                    <p class="font-lg badge badge-success w-50 my-1">Output: {{ keyDownText }}</p>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-center w-100">
+            <div class="d-flex flex-column w-50">
+                <div class="w-100 d-flex justify-content-center">
+                    <!-- Show the output text when the enter key is pressed -->
+                    <input type="text" class="w-50 my-1" v-on:keydown.enter="submitTextKeyUp" v-model="enterText" />
+                </div>
+                <div class="w-100 d-flex justify-content-center">
+                    <p class="font-lg badge badge-success w-50 my-1">Output: {{ submitText }}</p>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="card-footer container">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center my-1">
-                <img v-bind:src="getGoogleImage()" style="max-height: 200px; max-width:200px;" />
-            </div>
-            <div class="col-12 d-flex justify-content-center">
-                <input type="text" v-model="inputValue" class="w-100 text-center bg-white form-control-plaintext border rounded" v-on:keyup="userEnteredValue"/>
-            </div>
-        </div>
-    </div>
+
 </section>
 
 
@@ -33,38 +45,21 @@
     const app = Vue.createApp({
         data() {
             return {
-                inputDefault: 'Please input value',
-                inputValue: 'Please input value',
-                userName: 'Jesse Pecar',
-                userAge: 25,
-                textClass: 'w-100 text-center font-lg badge badge-success bg-purple rounded-pill py-1 mx-1',
-                randomNumber: Math.floor(Math.random() * 100),
-                userDefinedInput: []
+                keyDownText: '',
+                enterText: '',
+                submitText: ''
             };
         },
         methods: {
-            getGoogleImage() {
-                if (this.randomNumber < 25) {
-                    return 'https://static01.nyt.com/images/2020/12/23/business/23Techfix-illo/23Techfix-illo-mediumSquareAt3X.jpg';
-                } else if (this.randomNumber < 50) {
-                    return 'https://thoughtcatalog.com/wp-content/uploads/2018/08/vampire-movies.jpg?w=1920&h=1280&crop=1&resize=1920,1280&quality=95&strip=all';
-                } else if (this.randomNumber < 75) {
-                    return 'https://www.brookings.edu/wp-content/uploads/2017/11/metro_20171121_tech-empowers-tech-polarizes-mark-muro.jpg';
-                } else {
-                    return 'https://hmg-prod-io.hearstapps.com/images/tech-gifts-2020-1605302505.jpg?&auto=webp';
-                }
+            showAlert() {
+                alert("Submit button pressed!");
             },
-            getUserFutureAge() {
-                return this.userAge + 5;
+            onKeyDown(event) {
+                this.keyDownText = event.target.value;
             },
+            submitTextKeyUp(event) {
+                this.submitText = this.enterText;
 
-            userEnteredValue: function(e) {
-                if (e.keyCode === 13) {
-                    this.randomNumber = Math.random();
-                    this.userDefinedInput.push(this.inputValue);
-
-                    this.inputValue = this.inputDefault;
-                }
             }
         }
 

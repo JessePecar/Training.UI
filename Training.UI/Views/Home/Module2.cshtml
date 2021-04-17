@@ -5,8 +5,9 @@
 
 <div class="shadow-lg bg-dark p-3 mb-1 rounded">
     <div class="btn-group">
-        <a class="btn btn-light rounded-pill" asp-controller="Home" asp-action="Assignment1" type="submit">Assignment 1</a>
-        <a class="btn btn-light rounded-pill" asp-controller="Home" asp-action="Assignment2" type="submit">Assignment 2</a>
+        <a class="btn btn-light rounded-pill mx-1" asp-controller="Home" asp-action="Assignment1" type="submit">Assignment 1</a>
+        <a class="btn btn-light rounded-pill mx-1" asp-controller="Home" asp-action="Assignment2" type="submit">Assignment 2</a>
+        <a class="btn btn-light rounded-pill mx-1" asp-controller="Home" asp-action="Assignment3" type="submit">Assignment 3</a>
     </div>
 </div>
 
@@ -41,7 +42,7 @@
         <div class="card shadow">
             <div class="card-header">
                 <h2 class="text-black text-center border-bottom-thicc pb-1">Events in Action</h2>
-                <a class="btn btn-dark text-white float-right" v-on:click="toggleCollapse">{{isNotShown ? 'Show' : 'Collapse'}}</a>
+                <a class="btn btn-dark text-white float-right" v-bind:click="toggleCollapse">{{isNotShown ? 'Show' : 'Collapse'}}</a>
             </div>
             <div class="card-body bg-lightd-fex justify-content-center" v-bind:class="{ 'collapse': isNotShown}">
                 <section >
@@ -56,14 +57,34 @@
                     </div>
                     <div class="w-100 d-flex justify-content-center">
                         <div class="w-50 form-group row">
-                            <input type="text" class="form-control-plaintext col-12 text-center my-1 shadow border" v-on:input="setName($event, 'Rogers')" v-on:keyup.enter="confirmInput"/>
-                            <p class="col-12 font-lg badge badge-secondary text-center">Your Name: {{ confirmedUserName }}</p>
+                            <input type="text" class="form-control-plaintext col-5 text-center shadow border m-1" v-model="userName"/>
+                            <input type="text" class="form-control-plaintext col-5 text-center shadow border m-1" v-model="lastName"/>
+                            <button class="btn btn-danger col-12 m-1" v-on:click="resetInput">Reset Input</button>
+                            <p class="col-12 font-lg badge badge-secondary text-center">Your Name: {{ fullName }}</p>
                         </div>
                     </div>
                     <form v-on:submit.prevent="submitForm" class="d-flex justify-content-center py-1">
                         <input class=" text-center border mx-1" type="text"/>
                         <button class="btn btn-success" type="submit">Sign Up!</button>
                     </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dynamic-styling" class="my-2">
+    <div class="rounded">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="text-black text-center border-bottom-thicc pb-1">Dynamic Styling</h2>
+                <a class="btn btn-dark text-white float-right" v-bind:click="toggleCollapse">{{isNotShown ? 'Show' : 'Collapse'}}</a>
+            </div>
+            <div class="card-body bg-lightd-fex justify-content-center" v-bind:class="{ 'collapse': isNotShown}">
+                <section>
+                    <div class="border m-2" :class="div1Classes"  v-on:click="boxSelected(1)"><p>Click Me!</p></div>
+                    <div class="border m-2" :class="div2Classes"  v-on:click="boxSelected(2)"><p>Click Me!</p></div>
+                    <div class="border m-2" :class="div3Classes"  v-on:click="boxSelected(3)"><p>Click Me!</p></div>
                 </section>
             </div>
         </div>
@@ -107,11 +128,26 @@
                 courseGoal: 'Finish the course and learn Vue.js',
                 furtherCourseGoals: 'Master Vue to create some awesome apps!',
                 vueLink: 'https://vuejs.org',
-                isNotShown: false,
+                isNotShown: true,
                 currentCount: 0,
-                userName: '', 
-                confirmedUserName: ''
+                userName: '',
+                lastName: ''
             };
+        },
+        watch: {
+            counter(value) {
+                if (value > 50) {
+                    this.counter = 0;
+                }
+            }
+        },
+        computed: {
+            fullName() {
+                if (this.userName === '' || this.lastName === '') {
+                    return '';
+                }
+                return this.userName + ' ' + this.lastName;
+            }
         },
         methods: {
             outputGoal() {
@@ -132,7 +168,7 @@
                 this.currentCount -= num;
             },
             setName(event, lastName) {
-                this.userName = event.target.value + ' ' + lastName;
+                this.userName = event.target.value;
             },
             submitFormOld(event) {
                 //This will work, but there is a Vue way to do things
@@ -142,12 +178,46 @@
             submitForm() {
                 alert('Signed up!')
             },
-            confirmInput() {
-                this.confirmedUserName = this.userName;
+            resetInput() {
+                this.userName = '';
+                this.lastName = '';
             }
         }
     });
     part2.mount('#events');
 
+    const part3 = Vue.createApp({
+        data() {
+            return {
+                isNotShown: false,
+                div1Clicked: false,
+                div2Clicked: false,
+                div3Clicked: false
+            };
+        },
+        computed: {
+            div1Classes() {
+                return { 'border-danger': this.div1Clicked, 'bg-primary': this.div1Clicked };
+            },
+            div2Classes() {
+                return { 'border-danger': this.div2Clicked, 'bg-primary': this.div2Clicked };
+            },
+            div3Classes() {
+                return { 'border-danger': this.div3Clicked, 'bg-primary': this.div3Clicked };
+            }
+        },
+        methods: {
+            boxSelected(box) {
+                if (box === 1) {
+                    this.div1Clicked = !this.div1Clicked;
+                } else if (box === 2) {
+                    this.div2Clicked = !this.div2Clicked;
+                } else if (box === 3) {
+                    this.div3Clicked = !this.div3Clicked;
+                }
+            }
+        }
+    });
+    part3.mount('#dynamic-styling');
 
 </script>
