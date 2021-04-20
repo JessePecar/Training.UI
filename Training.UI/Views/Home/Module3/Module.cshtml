@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewData["Title"] = "Module 3";
+}
+
+<div class="shadow-lg bg-dark p-3 mb-1 rounded">
+    <div class="btn-group">
+        <a class="btn btn-light rounded-pill mx-1" asp-controller="Module3" asp-action="Assignment1" type="submit">Assignment 1</a>
+    </div>
+</div>
+
+<div id="moduleApp" class="rounded">
+    <div class="card shadow mb-3">
+        <div class="card-header bg-success d-flex justify-content-center">
+            <h1 class="text-white text-center">Vue.js Course Goals</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div id="my-course-goals" class="card">
+        <div class="card-header">
+            <h2 class="font-lg text-success">My Course Goals</h2>
+        </div>
+        <div class="card-body">
+            <div class="input-group">
+                <input type="text" v-model="enteredGoalValue" class="form-text" v-on:keyup.enter="addGoal" />
+                <button class="btn btn-danger input-group-append" v-on:click="addGoal">Add Goal</button>
+            </div>
+        </div>
+        <div v-if="goalEmpty" class="px-5">
+            <p class="alert alert-warning">
+                No goals have been added yet - please start adding some!
+            </p>
+        </div>
+        <div v-else class="px-5 my-1">
+            <ul class="list-group list-inline">
+                <li v-for="(goal, index) in goals" :key="goal" class="list-group-item-success my-1" v-on:click="removeGoal(index)">
+                    <div class="container py-2">
+                        <p class="font-lg">{{ goal }}</p>
+                        <input type="text" v-on:click.stop />
+                    </div>
+                </li>
+            </ul>
+            <!--<ul class="list-group list-inline">
+                <li v-for="(value, key) in {name: 'Jesse', age: 25}" class="list-group-item-success my-1">{{ key }}: {{ value }}</li>
+            </ul>
+            <ul class="list-group list-inline">
+                <li v-for="num in 10" class="list-group-item-success my-1">{{ num }}</li>
+            </ul>-->
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const part1 = Vue.createApp({
+        data() {
+            return {
+                enteredGoalValue: '',
+                goals: []
+            }
+        },
+        methods: {
+            addGoal() {
+                if (this.enteredGoalValue !== '') {
+                    this.goals.push(this.enteredGoalValue);
+                    this.enteredGoalValue = '';
+                }
+            },
+            removeGoal(idx) {
+                this.goals.splice(idx, 1);
+            }
+        },
+        computed: {
+            goalEmpty() {
+                return this.goals.length === 0;
+            }
+        }
+    });
+
+    part1.mount('#my-course-goals')
+</script>

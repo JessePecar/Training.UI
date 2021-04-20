@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Assignment 1";
+}
+
+<h1>Assignment 1</h1>
+<section id="conditional-content" class="card shadow-lg">
+    <div class="card-header ">
+        <h2 class="w-100 text-center p-3">Assignment</h2>
+    </div>
+    <div class="card-body d-flex justify-content-center">
+        <div class="container">
+
+        <div class="input-group">
+            <input class="form-text" v-model="task" v-on:keyup.enter="addTask" />
+            <button class="btn btn-light btn-outline-danger input-group-append" v-on:click="addTask">Add Task</button>
+        </div>
+        <ul class="list-group list-inline mt-3" v-if="showTasks">
+            <li class="list-group-item" v-for="t in taskGroup">{{ t }}</li>
+        </ul>
+        </div>
+    </div>
+    <div class="card-footer container">
+        <button class="btn btn-danger" v-on:click="toggleList">{{ showList ? 'Hide' : 'Show'}} List</button>
+    </div>
+</section>
+
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                task: '',
+                taskGroup: [],
+                showList: false
+            };
+        },
+        methods: {
+            addTask() {
+                this.taskGroup.push(this.task);
+                this.task = '';
+            },
+            toggleList() {
+                this.showList = !this.showList;
+            }
+        },
+        computed: {
+            showTasks() {
+                return this.taskGroup.length > 0 && this.showList;
+            }
+        }
+    });
+
+    app.mount('#conditional-content');
+</script>

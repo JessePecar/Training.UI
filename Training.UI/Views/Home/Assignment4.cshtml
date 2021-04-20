@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["Title"] = "Assignment2";
+}
+
+<h1>Assignment 4 - Vue Styling</h1>
+<section id="vue-styling" class="card shadow-lg">
+    <div class="card-header ">
+        <h2 class="w-100 text-center p-3">Dynamic Styling</h2>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <input class="form-text my-1" v-model="enteredBadge"/>
+            <p :class="['badge', 'my-1', {'d-block': isVisible}, enteredBadge, {'d-none': !isVisible}]">Style Me!</p>
+            <button class="btn btn-success my-1" v-on:click="onButtonClick">Toggle Paragraph</button>
+            <input class="form-text my-1" v-model="enteredColor"/>
+            <p class="my-1" :style="{'background-color': enteredColor}">Style Me Inline!</p>
+        </div>
+    </div>
+
+</section>
+
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                enteredBadge: 'badge-',
+                isVisible: true,
+                enteredColor: '#DDDDDD'
+            };
+        },
+        computed: {
+           
+        },
+        watch: {
+
+        },
+        methods: {
+            onButtonClick() {
+                this.isVisible = !this.isVisible;
+            }
+        }
+    });
+
+    app.mount('#vue-styling');
+
+</script>

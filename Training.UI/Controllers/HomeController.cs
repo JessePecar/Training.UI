@@ -28,6 +28,11 @@ namespace Training.UI.Controllers
             return View("~/Views/Home/Module2.cshtml");
         }
 
+        public IActionResult Module3()
+        {
+            return View("~/Views/Home/Module3/Module.cshtml");
+        }
+
         public IActionResult Assignment1()
         {
             return View("~/Views/Home/Assignment1.cshtml");
@@ -40,6 +45,11 @@ namespace Training.UI.Controllers
         public IActionResult Assignment3()
         {
             return View("~/Views/Home/Assignment3.cshtml");
+        }
+        
+        public IActionResult Assignment4()
+        {
+            return View("~/Views/Home/Assignment4.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
