@@ -1,0 +1,191 @@
+﻿@model Training.UI.Models.MonsterSlayerViewModel
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Serialization;
+@using System.Web;
+@{
+    ViewData["Title"] = "Monster Slayer";
+
+    var serializationSettings = new JsonSerializerSettings()
+    {
+        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+        StringEscapeHandling = StringEscapeHandling.EscapeHtml
+    };
+
+    var data = Html.Raw(
+             HttpUtility.JavaScriptStringEncode(
+                JsonConvert.SerializeObject(
+                    Model, Formatting.None, serializationSettings
+                ),
+             false)
+        );
+}
+<div id="monster-slayer-container" class="container">
+    <div class="card bg-danger m-0 show my-2">
+        <h1 class="text-white font-weight-bolder w-100 text-center py-5">Monster Slayer</h1>
+    </div>
+    <div class="card my-2">
+        <div class="card-header">
+            <h3 class="w-100 text-center">Monster Health</h3>
+        </div>
+        <div class="card-body">
+            <div class="bg-danger" style="height: 30px;" :style="{width: monsterHealthPercent}">
+                <h3 class="w-100 text-center">{{ monsterHealth }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="card my-2">
+        <div class="card-header">
+            <h3 class="w-100 text-center">Your Health</h3>
+        </div>
+        <div class="card-body">
+            <div class="bg-success" style="height: 30px;" :style="{width: playerHealthPercent}">
+                <h3 class="w-100 text-dark text-center">{{ playerHealth }}</h3>
+            </div>
+        </div>
+    </div>
+    <div v-if="didPlayerWin" class="card my-2">
+        <div class="card-body">
+            <p class="text-center">You Win! You have defeated the big bad monster.</p>
+        </div>
+        <div class="card-footer">
+            <div class="w-100 d-block">
+                <a class="text-primary float-right" asp-controller="Project" asp-action="MonsterSlayer">Play Again?</a>
+            </div>
+        </div>
+    </div>
+    <div v-else-if="didMonsterWin" class="card my-2">
+        <div class="card-body">
+            <p class="text-center">You Lose! You unfortunately lost to the big bad monster.</p>
+        </div>
+        <div class="card-footer">
+            <div class="w-100 d-block">
+                <a class="text-primary float-right" asp-controller="Project" asp-action="MonsterSlayer">Play Again?</a>
+            </div>
+        </div>
+    </div>
+    <div v-else class="row my-2">
+        <div class="col-1"></div>
+        <div class="col-5 my-1 px-2"><button class="w-100 py-2 btn btn-primary" v-on:click="attackMonster">ATTACK</button></div>
+        <div class="col-5 my-1 px-2"><button class="w-100 py-2 btn btn-primary" v-on:click="specialAttack" :disabled="disableSpecialAttck">SPECIAL ATTACK</button></div>
+        <div class="col-1"></div>
+
+
+        <div class="col-1"></div>
+        <div class="col-5 my-1 px-2"><button class="w-100 py-2 btn btn-primary" v-on:click="playerHeal">HEAL</button></div>
+        <div class="col-5 my-1 px-2"><button class="w-100 py-2 btn btn-primary" v-on:click="playerSurrender">SURRENDER</button></div>
+        <div class="col-1"></div>
+    </div>
+
+
+    <div class="card my-2">
+        <div class="card-header">
+            <div class="w-100 d-flex justify-content-center">
+                <h3 class="bg-warning rounded text-dark font-lg py-2 px-4">Battle Log</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="list-inline">
+                <li class="" v-for="log in battleLog">
+                    <div>
+                        <!-- this.battleLog.push({ source: 'Player', damage: attackValue, isSpecialAttack: false, isHeal: false})-->
+                        <span :class="[getClassFromSource(log.source)]">{{ log.source }} </span>
+                        <span> {{ getLogDescription(log) }} for </span>
+                        <span :class="[getTextDecorationForHealthMod(log.isHeal)]">{{ log.damage }} health</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getRandomValue(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min
+    }
+
+    const monsterSlayerApp = Vue.createApp({
+        data() {
+            return JSON.parse('@data')
+            
+        },
+        watch: {
+            monsterHealth() {
+                if (this.monsterHealth < 0) {
+                    this.monsterHealth = 0;
+                }
+            },
+            playerHealth() {
+                if (this.playerHealth < 0) {
+                    this.playerHealth = 0;
+                }
+            }
+        },
+        computed: {
+            playerHealthPercent() {
+                return this.playerHealth + '%';
+            },
+            monsterHealthPercent() {
+                return this.monsterHealth + '%';
+            },
+            disableSpecialAttck() {
+                if (this.specialAttackMaximum <= 0) {
+                    return true;
+                }
+                return false;
+            },
+            didPlayerWin() {
+                return this.monsterHealth <= 0;
+            },
+            didMonsterWin() {
+                return this.playerHealth <= 0;
+            }
+        },
+        methods: {
+            attackMonster() {
+                const attackValue = getRandomValue(this.playerMinHitModifier, this.playerMaxHitModifier);
+                this.monsterHealth -= attackValue;
+                this.battleLog.push({ source: 'Player', damage: attackValue, isSpecialAttack: false, isHeal: false})
+                if (this.monsterHealth > 0) {
+                    this.attackPlayer();
+                }
+            },
+            attackPlayer() {
+                const attackValue = getRandomValue(this.monsterMinHitModifier, this.monsterMaxHitModifier);
+                this.playerHealth -= attackValue;
+                this.battleLog.push({ source: 'Monster', damage: attackValue, isSpecialAttack: false, isHeal: false })
+            },
+            specialAttack() {
+                const attackValue = getRandomValue(this.playerMinHitModifier + 5, this.playerMaxHitModifier + 7);
+                this.monsterHealth -= attackValue;
+                this.specialAttackMaximum -= 1;
+                this.battleLog.push({ source: 'Player', damage: attackValue, isSpecialAttack: true, isHeal: false })
+                this.attackPlayer();
+            },
+            playerHeal() {
+                const healValue = getRandomValue(this.monsterMinHitModifier * 2, this.monsterMaxHitModifier * 2);
+                this.playerHealth += healValue;
+                this.battleLog.push({ source: 'Player', damage: healValue, isSpecialAttack: false, isHeal: true })
+                this.attackPlayer();
+            },
+            playerSurrender() {
+                this.playerHealth = 0;
+            },
+            getClassFromSource(source) {
+                if (source === 'Player') return 'text-success'
+                return 'text-danger'
+            },
+            getLogDescription(log) {
+                if (log.isSpecialAttack) return ' special attacked';
+                else if (log.isHeal) return ' healed';
+                return ' attacked';
+            },
+            getTextDecorationForHealthMod(isHeal) {
+                if (isHeal) return 'text-success';
+                return 'text-danger';
+            }
+        }
+
+    });
+
+    monsterSlayerApp.mount('#monster-slayer-container');
+</script>
