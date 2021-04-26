@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewData["Title"] = "Module 4";
+}
+
+<div class="shadow-lg bg-dark p-3 mb-1 rounded">
+    <div class="btn-group">
+        <a class="btn btn-light rounded-pill mx-1" asp-controller="Module4" asp-action="Assignment1" type="submit">Assignment 1</a>
+    </div>
+</div>
+
+<div id="moduleApp" class="rounded">
+    <div class="card shadow mb-3">
+        <div class="card-header bg-success d-flex justify-content-center">
+            <h1 class="text-white text-center">Friends List</h1>
+        </div>
+    </div>
+</div>
+<div class="container" id="module-5-app">
+    <ul class="list-group-flush">
+        <friend-list></friend-list>
+        <friend-list></friend-list>
+    </ul>
+
+
+</div>
+
+<script>
+    const part1 = Vue.createApp({});
+
+    part1.component('friend-list', {
+        template: `
+        <li class="list-group-item" :key="friend.id">
+            <div class="card">
+                <div class="card-header w-100 d-flex justify-content-center"><h2>{{ friend.name }}</h2></div>
+                <div class="card-body">
+                    <div class="w-100 d-flex justify-content-center my-1">
+                        <button class="btn btn-danger" v-on:click="toggleDetails">Show Details</button>
+                    </div>
+                    <ul class="list-group-flush list-group" v-if="detailsAreVisible">
+                        <li class="list-group-item">
+                            <div class="rounded shadow p-2 my-1">
+                                <p><strong>Phone:</strong> {{ friend.phone }}</p>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="rounded shadow p-2 my-1">
+                                <p><strong>Email:</strong> {{friend.email}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        `,
+        data() {
+            return {
+                detailsAreVisible: false,
+                friend: {
+                    id: 'friend-1',
+                    name: 'My Only Friend',
+                    phone: '(123)456-7890',
+                    email: 'some@email.com'
+                }
+            };
+        },
+        methods: {
+            toggleDetails() {
+                this.detailsAreVisible = !this.detailsAreVisible;
+            }
+        }
+    });
+
+    part1.mount('#module-5-app ');
+</script>
