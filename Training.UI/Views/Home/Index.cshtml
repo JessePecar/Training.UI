@@ -8,6 +8,8 @@
     <ul class="list-group list-group-flush" id="">
         <li class="list-group-item" v-for="goal in goals">{{ goal }}</li>
     </ul>
+    <div id="app">
+    </div>
 </div>
 <script>
     Vue.createApp({
@@ -23,5 +25,7 @@
                 this.enteredValue = '';
             }
     }
-}).mount('#graphics');
+    }).mount('#graphics');
+
+
 </script>

@@ -2,3 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')

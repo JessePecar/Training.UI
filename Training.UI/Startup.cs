@@ -57,7 +57,7 @@ namespace Training.UI
 
                 endpoints.MapToVueCliProxy(
                     "{*path}",
-                    new SpaOptions { SourcePath = "client-app" },
+                    new SpaOptions { SourcePath = "vue-app" },
                     npmScript: (System.Diagnostics.Debugger.IsAttached) ? "serve" : null,
                     regex: "Compiled successfully",
                     forceKill: true

@@ -5,6 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\vue-app\.gitignore" />
+    <Content Remove="wwwroot\vue-app\babel.config.js" />
+    <Content Remove="wwwroot\vue-app\public\favicon.ico" />
+    <Content Remove="wwwroot\vue-app\public\index.html" />
+    <Content Remove="wwwroot\vue-app\README.md" />
+    <Content Remove="wwwroot\vue-app\src\App.vue" />
+    <Content Remove="wwwroot\vue-app\src\assets\logo.png" />
+    <Content Remove="wwwroot\vue-app\src\components\HelloWorld.vue" />
+    <Content Remove="wwwroot\vue-app\src\main.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.5" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.2.4">
       <PrivateAssets>all</PrivateAssets>
@@ -17,6 +29,27 @@
   <ItemGroup>
     <Folder Include="Components\" />
     <Folder Include="wwwroot\vue-components\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\vue-app\.gitignore" />
+    <None Include="wwwroot\vue-app\babel.config.js" />
+    <None Include="wwwroot\vue-app\public\favicon.ico" />
+    <None Include="wwwroot\vue-app\public\index.html" />
+    <None Include="wwwroot\vue-app\README.md" />
+    <None Include="wwwroot\vue-app\src\App.vue" />
+    <None Include="wwwroot\vue-app\src\assets\logo.png" />
+    <None Include="wwwroot\vue-app\src\components\HelloWorld.vue" />
+    <None Include="wwwroot\vue-app\src\main.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\vue-app\package-lock.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\vue-app\package.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
